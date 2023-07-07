@@ -3,12 +3,14 @@ import axios from 'axios'
 
 import WeatherForm from './WeatherForm'
 import Card from './Card'
+import Loader from './Loader'
 
 const Weather = () => {
 
   const [ weather, setWeather ] = useState([])
   const [ searchWeather, setSearchWeather ] = useState([])
   const [ location, setLocation ] = useState("")
+  const [ isLoading, setIsLoading ] = useState(true)
   /*---------------------------- */
   useEffect(() => {
     
@@ -18,9 +20,10 @@ const Weather = () => {
       
    axios.get(`https://api.openweathermap.org/data/2.5/weather?lat=${crd.latitude}&lon=${crd.longitude}&appid=3b2730e53dc1143db1c9515aa10a5c66`)
       .then( resp => {
-        console.log(resp.data
-                   )
         setSearchWeather(resp.data)
+        setTimeout(() => { 
+         setIsLoading(false)
+        }, 200)
       } )
       .catch( err => console.error(err) )
   
@@ -46,6 +49,7 @@ const Weather = () => {
   
   return(
     <>
+      { isLoading && <Loader/> }
       <WeatherForm 
         getLocation={ searchLocation }
       />
